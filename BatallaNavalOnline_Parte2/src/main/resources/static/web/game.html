@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="styles/game.css">
+	<title>Salvo Game</title>
+</head>
+
+<body>
+	<div class="container-fluid" id="app">
+		<div class="row">
+			<div class="col-11 text-center">
+				<h2>Welcome <strong class="
+featuredText">{{viewer.email}}</strong> to your the Salvo Game </h2>
+			</div>
+			<div class="col-1 text-right">
+				<button type="button" class="btn btn-secondary" v-on:click="logout">Logout</button>
+			</div>
+		</div>
+		<!-- Logging out -->
+		<div class="row">
+			<!-- Información de los players-->
+			<div class="col-4 ">
+				<h4 class="players">Players: </h4>
+				<strong class="featuredText">{{viewer.email || 'sin oponente'}} (you) vs {{ otherPlayer.email || 'sin oponente'}} </strong>
+			</div>
+			<div class="col-4 text-center tableBody message">
+				<strong> Message: {{message}} </strong>
+			</div>
+			<!-- Listo para Agregar Salvoes -->
+			<div class="col-4" v-if="gameState=='SHOOT'">
+				<button type="button" class="btn btn-secondary featuredButton" v-on:click="listoSalvoes">Save shots</button>
+			</div>
+			<div class="col-4 text-right" v-if="gameState=='WIN' || gameState=='LOST' || gameState=='TIED'">
+				<button type="button" class="btn btn-secondary featuredButton" v-on:click="leaderboard">
+					See Leaderboard
+				</button>
+			</div>
+		</div>
+		<!-- Seleccionar barcos y ubicación -->
+		<div class="row ">
+			<div class="col-8 tableBody" class="checkSelection" v-if="gameState=='PLACE_SHIPS'">
+				<div class="row labelMails seleccion">
+					<!--Selección el Barco a ubicar-->
+					<div class="col-4">
+						<label>
+							<strong class="featuredText">Ship: </strong>
+							<select id="ships">
+								<option value="" selected="selected">--Select--</option>
+								<option v-for="ship in shipsData" v-bind:value="ship.type">{{ship.type}} : {{ship.longitud}} cells</option>
+							</select>
+						</label>
+					</div>
+					<!--Selección de Posición del Barco-->
+					<div class="col-4">
+						<strong class="featuredText">Position: </strong>
+						<label><input type="radio" name="position" value="h" checked> Horizontal<br></label>
+						<label><input type="radio" name="position" value="v"> Vertical<br></label>
+					</div>
+					<!-- Listo para Agregar Ships -->
+					<div class="col-4 text-left">
+						<button type="button" class="btn btn-secondary featuredButton" v-on:click="listoShips" >Save ships</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="row ">
+			<div class="col-6">
+				<div class="row boxTitleTableShip">
+					<div class="col-8">
+						<h2 class="titleTableShip">Ship Locations!</h2>
+					</div>
+					<div class="col-4" v-if="gameState!='PLACE_SHIPS'">
+						<table class="results boxFloatShip">
+							<tbody>
+								<tr>
+									<th>Float on You</th>
+									<td>{{leftOnViewer}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row " v-if="gameState!='PLACE_SHIPS' && gameState!='WAIT_SHIPS_OPPONENT' && gameState!='WAIT_OPPONENT'">
+					<div class="col-4">
+						<table class="results boxFloatShip">
+							<tbody>
+								<tr>
+									<th class="boxFloatShip">Float on Opponent</th>
+									<td>{{leftOnOpponent}}</td>
+								</tr>
+							</tbody>
+
+						</table>
+					</div>
+					<div class="col-4">
+						<h2>Salvo Locations!</h2>
+					</div>
+
+					<div class="col-4 boxRulesSalvoes">
+						<details>
+							<summary class="featuredText">Rules for locating salvoes</summary>
+
+							<ul>
+								<li>Select the cell where you want to place your salvo.</li>
+								<li>Only a maximum of 5 shots per turn is allowed.</li>
+								<li>In order to shoot, you may have 2 turns ahead of your opponent.</li>
+							</ul>
+							<strong>Note:
+							</strong>
+							<p>
+								To relocate your salvo you must select the already located safe and then select the cell where you want to relocate the salvo.
+							</p>
+						</details>
+					</div>
+
+				</div>
+			</div>
+
+
+		</div>
+
+        <div class="row ">
+            <!--Grilla de Ships -->
+            <div class="col-4">
+                <table class="locations">
+                    <thead>
+                    <th></th>
+                    <th v-for="columnHeader in columnHeaders">
+                        {{columnHeader}}
+                    </th>
+                    </thead>
+
+                    <tbody>
+                    <tr v-for="rowHeader in rowHeaders">
+                        <th>
+                            {{rowHeader}}
+                        </th>
+                        <td v-for="columnHeader in columnHeaders" v-on:click="ubicarShip(rowHeader,columnHeader)">
+                            <!-- Para mostrar los ships-->
+                            <div v-bind:class="getShipTypePartMostrar(rowHeader+columnHeader)" v-if="shipLocations.indexOf(rowHeader+columnHeader) != -1 && getTurnoShipSalvo(rowHeader+columnHeader) == -1 ">
+                            </div>
+                            <div class="shipSalvo" v-if="shipLocations.indexOf(rowHeader+columnHeader) != -1 && getTurnoShipSalvo(rowHeader+columnHeader) != -1">
+                                <strong>{{getTurnoShipSalvo(rowHeader+columnHeader)}}</strong>
+                            </div>
+                            <!--  Que esta función retorne las dos clases que quiero que ejecute, como una cadena-->
+                            <div v-bind:class="getShipTypePartUbicar(rowHeader+columnHeader)" v-if="locations.indexOf(rowHeader+columnHeader) != -1 && gameState=='PLACE_SHIPS'"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-2">
+                <div class="row">
+                    <div class="col-12 text-center divisor">
+                        <table class="results tableShipsOpponent">
+                            <thead>
+                            <tr>
+                                <th colspan="2" class="boxFloatShip">Ships on You</th>
+                            </tr>
+                            </thead>
+                           
+                            <tbody>
+                            <tr v-for="ship in shipsData">
+                                <td>{{ship.type}}</td>
+
+                                <td v-if="sunksOnViewer.indexOf(ship.type)!=-1">
+                                    <img v-bind:src="ship.sunk" alt="sunk">
+                                </td>
+                                <td v-else><img v-bind:src="ship.link" alt="ship"></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Muestra los hits on viewer-->
+                    <div class="col-12 text-center  divScroll" v-if="gameState!='PLACE_SHIPS'">
+                        <table class="results sizeTableHits">
+                            <thead>
+                            <tr>
+                                <th rowspan="2" class="boxFloatShip">Turn</th>
+                                <th colspan="2" class="boxFloatShip">Hits on You</th>
+                            </tr>
+                            <tr>
+                                <th class="boxFloatShip">
+                                    Ship Type
+                                </th>
+                                <th class="boxFloatShip">
+                                    Hit
+                                </th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr v-for="shipHit in shipsHitsViewer">
+                                <td>
+                                    {{shipHit.turn}}
+                                </td>
+                                <td>
+                                    {{shipHit.type}}
+                                </td>
+                                <td>
+                                    {{shipHit.hits.length}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-6 tableBody listLocateShip" v-if="gameState=='PLACE_SHIPS'">
+                Lista de Instrucciones
+
+                <strong class="titleListLocateShip">
+                    List of Instructions to Locate Your Ship:
+                </strong>
+                <ol>
+                    <li>Select the ship to locate.</li>
+                    <li>
+                         Select ship's position.</li>
+                    <li>Click on the grid cell where you want to locate the ship.</li>
+
+                </ol>
+                <strong class="titleListLocateShip">Note:</strong>
+                <p>To relocate  your  boats follow the same instructions to locate. </p>
+            </div>
+
+            <div class="col-2" v-if="gameState!='PLACE_SHIPS' && gameState!='WAIT_SHIPS_OPPONENT' && gameState!='WAIT_OPPONENT'">
+                <div class="row">
+                    <div class="col-12 text-center divisor">
+                        <table class="results tableShipsOpponent">
+                            <thead>
+                            <tr>
+                                <th colspan="2" class="boxFloatShip">Ships on Opponent</th>
+                            </tr>
+                            </thead>
+                           
+                            <tbody>
+                            <tr v-for="ship in shipsData">
+                                <td>{{ship.type}}</td>
+
+                                <td v-if="sunksOnOpponent.indexOf(ship.type)!=-1"><img v-bind:src="ship.sunk" alt="sunk"></td>
+                                <td v-else><img v-bind:src="ship.link" alt="ship"></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Muestra Hits on Oponent-->
+                    <div class="col-12 text-center divScroll">
+                        <table class="results sizeTableHits">
+                            <thead>
+                            <tr>
+                                <th rowspan="2" class="boxFloatShip">Turn</th>
+                                <th colspan="2" class="boxFloatShip">Hits on Opponent</th>
+                            </tr>
+
+                            <tr>
+                                <th class="boxFloatShip">
+                                    Ship Type
+                                </th>
+                                <th class="boxFloatShip">
+                                    Hit
+                                </th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr v-for="shipHit in shipsHitsOpponent">
+                                <td>
+                                    {{shipHit.turn}}
+                                </td>
+                                <td>
+                                    {{shipHit.type}}
+                                </td>
+                                <td>
+                                    {{shipHit.hits.length}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!--Grilla de Salvoes -->
+            <div class="col-4" v-if="gameState!='PLACE_SHIPS' && gameState!='WAIT_SHIPS_OPPONENT' && gameState!='WAIT_OPPONENT' ">
+                <table class="locations">
+                    <thead>
+                    <th></th>
+                    <th v-for="columnHeader in columnHeaders">
+                        {{columnHeader}}
+                    </th>
+                    </thead>
+
+                    <tbody>
+                    <tr v-for="rowHeader in rowHeaders">
+                        <th>
+                            {{rowHeader}}
+                        </th>
+                        <td v-for="columnHeader in columnHeaders" v-on:click="ubicarSalvo(rowHeader,columnHeader)">
+                            <div class="salvo" v-if="getTurnoSalvo(rowHeader+columnHeader) != -1 && hitsOpponent.indexOf(rowHeader+columnHeader) == -1">
+                                <strong>{{getTurnoSalvo(rowHeader+columnHeader)}}</strong>
+                            </div>
+                            <div class="shipSalvo" v-if="getTurnoSalvo(rowHeader+columnHeader) != -1 && hitsOpponent.indexOf(rowHeader+columnHeader) != -1">
+                                <strong>{{getTurnoSalvo(rowHeader+columnHeader)}}</strong>
+                            </div>
+                            <div class="salvo" v-if="locationsSalvo.indexOf(rowHeader+columnHeader) != -1 && gameState=='SHOOT' && gameState!='PLACE_SHIPS'"> </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+		
+	</div>
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<!-- Cambio a versión de (versión delgada)slim.min a min para que tome 'get'-->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<!-- Include the Vue library -->
+	<script src="https://unpkg.com/vue/dist/vue.js"> </script>
+	<!-- Carga script para acceder al listado de miembros de games, con datos desde mi localhost-->
+	<script src="js/game.js"></script>
+	<script src="js/moment.js"></script>
+	<script src="js/sweetalert.min.js"></script>
+
+</body>
+
+</html>

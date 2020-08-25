@@ -1,0 +1,330 @@
+body {
+	background-image: url(../images/fondoGames.jpg);
+	background-attachment: fixed;
+}
+
+th {
+	background-color: gray;
+	color: white;
+	border-style: solid !important;
+	border-color: darkviolet !important;
+	border-width: 2px !important;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+	width: 40px;
+	height: 40px;
+}
+
+h1 {
+	text-align: center;
+	color: darkviolet;
+}
+
+h2,
+h3 {
+	color: darkviolet;
+}
+
+.featuredText{
+	color: white;
+}
+
+.featuredButton{
+	color: white;
+	background-color:green;
+}
+
+.players{
+	display: inline; 
+	color:darkviolet; 
+	width:5px;
+}
+
+.message{
+	width:10px; 
+	border-radius: 10px; 
+	color: red;
+}
+
+.checkSelection{
+	padding-top: 3px;
+	height: 45px; 
+	background-color: deepskyblue;
+	border-radius: 15px;
+}
+
+.boxTitleTableShip{
+	margin-bottom: 2px;
+}
+
+.titleTableShip{
+	margin-bottom: 0px;
+}
+
+.boxFloatShip{
+	height: 1px;
+}
+
+.tableShipsOpponent{
+	width: 200px; 
+	height: 100px
+}
+
+.boxRulesSalvoes{
+position: absolute; 
+z-index: 2; 
+right: 2px; 
+background-color: green;
+}
+
+
+.divisor{
+	margin-bottom: 5px;
+}
+
+.sizeTableHits{
+	
+	width: 200px;
+	height: 200px;
+}
+
+.listLocateShip{
+	width: 350px ; 
+	height: 230px; 
+	position: relative;
+	left: 200px;
+}
+
+.titleListLocateShip{
+	color:red;
+}
+
+.divScroll {
+	/* Trigger vertical scroll */
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+td {
+	border-style: solid !important;
+	border-color: cadetblue;
+	border-width: 0.3px !important;
+	text-align: justify;
+	padding: 0px;
+}
+
+.locations {
+	background-image: url(../images/marCyan.gif);
+	background-size: cover;
+}
+
+.results {
+	background-color: lightblue;
+	color: white;
+
+}
+
+img {
+	width: 100px;
+}
+
+.tableBody {
+	background-color: darkblue;
+	border-style: solid !important;
+	border-color: darkviolet;
+	border-width: 2px !important;
+	color: white;
+	margin-bottom: 7px;
+}
+
+.seleccion{
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.salvo {
+	background-color: yellow !important;
+	background-size: cover;
+	color: blue !important;
+	width: 100%;
+	height: 40px;
+	padding: 0px;
+	
+}
+
+.shipSalvo {
+	background-image: url(../images/hit.gif);
+	width: 100%;
+	height: 40px;
+	padding: 0px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	color: red;
+	text-align: center;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+select:focus {
+	outline: none !important;
+}
+
+.shipHor {
+	background-size: cover;
+	width: 100%;
+	height: 40px;
+	background-repeat: no-repeat;
+	background-position: center;
+    margin: 0px;
+	padding: 0px;
+}
+
+.shipVer {
+	background-size: cover;
+	width: 100%;
+	height: 40px;
+	background-repeat: no-repeat;
+	background-position: center;
+	margin: 0px;
+	padding: 0px;
+}
+
+.AircraftCarrierH0 {
+	background-image: url(../images/aircraftCarrierH0.png);
+}
+
+.AircraftCarrierH1 {
+	background-image: url(../images/aircraftCarrierH1.png);
+}
+
+.AircraftCarrierH2 {
+	background-image: url(../images/aircraftCarrierH2.png);
+}
+
+.AircraftCarrierH3 {
+	background-image: url(../images/aircraftCarrierH3.png);
+}
+
+.AircraftCarrierH4 {
+	background-image: url(../images/aircraftCarrierH4.png);
+}
+
+.AircraftCarrierV0 {
+	background-image: url(../images/aircraftCarrierV0.png);
+}
+
+.AircraftCarrierV1 {
+	background-image: url(../images/aircraftCarrierV1.png);
+}
+
+.AircraftCarrierV2 {
+	background-image: url(../images/aircraftCarrierV2.png);
+}
+
+.AircraftCarrierV3 {
+	background-image: url(../images/aircraftCarrierV3.png);
+}
+
+.AircraftCarrierV4 {
+	background-image: url(../images/aircraftCarrierV4.png);
+}
+
+.BattleshipV0 {
+	background-image: url(../images/battleshipV0.png);
+}
+
+.BattleshipV1 {
+	background-image: url(../images/battleshipV1.png);
+}
+
+.BattleshipV2 {
+	background-image: url(../images/battleshipV2.png);
+}
+
+.BattleshipV3 {
+	background-image: url(../images/battleshipV3.png);
+}
+
+.BattleshipH0 {
+	background-image: url(../images/battleshipH0.png);
+}
+
+.BattleshipH1 {
+	background-image: url(../images/battleshipH1.png);
+}
+
+.BattleshipH2 {
+	background-image: url(../images/battleshipH2.png);
+}
+
+.BattleshipH3 {
+	background-image: url(../images/battleshipH3.png);
+}
+
+.SubmarineV0 {
+	background-image: url(../images/submarineV0.png);
+}
+
+.SubmarineV1 {
+	background-image: url(../images/submarineV1.png);
+}
+
+.SubmarineV2 {
+	background-image: url(../images/submarineV2.png);
+}
+
+.SubmarineH0 {
+	background-image: url(../images/submarineH0.png);
+}
+
+.SubmarineH1 {
+	background-image: url(../images/submarineH1.png);
+}
+
+.SubmarineH2 {
+	background-image: url(../images/submarineH2.png);
+}
+
+.DestroyerV0 {
+	background-image: url(../images/destroyerV0.png);
+}
+
+.DestroyerV1 {
+	background-image: url(../images/destroyerV1.png);
+}
+
+.DestroyerV2 {
+	background-image: url(../images/destroyerV2.png);
+}
+
+.DestroyerH0 {
+	background-image: url(../images/destroyerH0.png);
+}
+
+.DestroyerH1 {
+	background-image: url(../images/destroyerH1.png);
+}
+
+.DestroyerH2 {
+	background-image: url(../images/destroyerH2.png);
+}
+
+.PatrolBoatH0 {
+	background-image: url(../images/patrolBoatH0.png);
+}
+
+.PatrolBoatH1 {
+	background-image: url(../images/patrolBoatH1.png);
+}
+
+.PatrolBoatV0 {
+	background-image: url(../images/patrolBoatV0.png);
+}
+
+.PatrolBoatV1 {
+	background-image: url(../images/patrolBoatV1.png);
+}

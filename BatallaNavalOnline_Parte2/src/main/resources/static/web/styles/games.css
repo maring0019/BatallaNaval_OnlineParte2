@@ -1,0 +1,55 @@
+body{
+	background-image: url(../images/fondoGames.jpg);
+}
+.titulos{
+	color: darkblue;
+}
+
+h1{
+	text-align: center;
+}
+table,
+td,
+th {
+	border-style: solid !important;
+	border-color: darkviolet;
+	border-width: 2px !important;
+	text-align: center!important;
+	background-color: darkblue;
+}
+
+th {
+	background-color: gray;
+	color:darkblue;
+}
+td{
+	color: white;
+}
+div{
+	padding-bottom: 5px;
+}
+
+.titleWelcome{
+	color: white;
+}
+.sizeDivSignIn{
+	width: 420px;
+}
+.tableGames{
+	width: 600px; 
+	color:blue;
+}
+
+
+.labelMail{
+	color: gray!important;
+}
+
+
+.tableBody{
+	background-color: darkblue;
+	border-style: solid !important;
+	border-color: darkviolet;
+	border-width: 2px !important;
+	color: white;	
+}
